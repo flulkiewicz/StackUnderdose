@@ -19,7 +19,12 @@ namespace StackUnderdose.Entities
 
                 eb.HasOne(a => a.Author)
                   .WithMany(u => u.Answers)
-                  .HasForeignKey(a => a.AuthorId);
+                  .HasForeignKey(a => a.AuthorId)
+                  .OnDelete(DeleteBehavior.NoAction);
+
+                eb.HasOne(a => a.Question)
+                  .WithMany(q => q.Answers)
+                  .HasForeignKey(a => a.QuestionId);
             });
 
             modelBuilder.Entity<Question>(eb => 
@@ -35,8 +40,8 @@ namespace StackUnderdose.Entities
 
                 eb.HasOne(q => q.Author)
                   .WithMany(u => u.Questions)
-                  .HasForeignKey(q => q.AuthorId);
-                
+                  .HasForeignKey(q => q.AuthorId)
+                  .OnDelete(DeleteBehavior.NoAction);
             });
 
                 
