@@ -8,9 +8,7 @@
         public string DisplayName { get; set; }
 
         public string Email { get; set; }
-
-        
-
-        
+        public List<Answer> Answers { get; set; } = new List<Answer>();
+        public List<Question> Questions { get; set; } = new List<Question>();
     }
 }
