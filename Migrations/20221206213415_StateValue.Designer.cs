@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using StackUnderdose.Entities;
 
@@ -11,9 +12,11 @@ using StackUnderdose.Entities;
 namespace StackUnderdose.Migrations
 {
     [DbContext(typeof(StackUnderdoseContext))]
-    partial class StackUnderdoseContextModelSnapshot : ModelSnapshot
+    [Migration("20221206213415_StateValue")]
+    partial class StateValue
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -54,10 +57,10 @@ namespace StackUnderdose.Migrations
                     b.Property<int>("QuestionId")
                         .HasColumnType("int");
 
-                    b.Property<int>("Score")
+                    b.Property<string>("Score")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(0);
+                        .HasColumnType("nvarchar(max)")
+                        .HasDefaultValue("0");
 
                     b.HasKey("Id");
 

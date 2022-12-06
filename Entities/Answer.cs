@@ -10,6 +10,6 @@ namespace StackUnderdose.Entities
         public Guid AuthorId { get; set; }
         public Question Question { get; set; }
         public int QuestionId { get; set; }
-        public string Score { get; set; } 
+        public int Score { get; set; } 
     }
 }

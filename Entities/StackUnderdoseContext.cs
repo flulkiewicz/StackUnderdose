@@ -38,6 +38,9 @@ namespace StackUnderdose.Entities
                 eb.Property(x => x.Description)
                   .IsRequired();
 
+                eb.Property(x => x.State)
+                  .HasDefaultValue("Unanswered");
+
                 eb.HasOne(q => q.Author)
                   .WithMany(u => u.Questions)
                   .HasForeignKey(q => q.AuthorId)

@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using StackUnderdose.Entities;
+using StackUnderdose.Seeders;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,7 +22,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+using var scope = app.Services.CreateScope();
+var dbContext = scope.ServiceProvider.GetService<StackUnderdoseContext>();
 
+Seeder.Seed(dbContext);
 
 
 app.Run();
