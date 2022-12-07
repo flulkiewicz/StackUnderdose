@@ -4,7 +4,11 @@ namespace StackUnderdose.Entities
 {
     public class StackUnderdoseContext : DbContext
     {
-        public StackUnderdoseContext(DbContextOptions<StackUnderdoseContext> options) : base(options) { }
+        public StackUnderdoseContext(DbContextOptions<StackUnderdoseContext> options) : base(options) 
+        {
+
+
+        }
         public DbSet<Answer> Answers { get; set; }
         public DbSet<Question> Questions { get; set; }
         public DbSet<Tag> Tags { get; set; }
@@ -68,6 +72,25 @@ namespace StackUnderdose.Entities
 
                 eb.Property(x => x.Email)
                   .IsRequired();
+            });
+
+            modelBuilder.Entity<Comment>(eb =>
+            {
+                eb.HasOne(c => c.Author)
+                  .WithMany(a => a.Comments)
+                  .HasForeignKey(c => c.AuthorId)
+                  .OnDelete(DeleteBehavior.NoAction);
+
+                eb.HasOne(c => c.Question)
+                  .WithMany(q => q.Comments)
+                  .HasForeignKey(c => c.QuestionId)
+                  .OnDelete(DeleteBehavior.NoAction);
+
+                eb.HasOne(c => c.Answer)
+                  .WithMany(a => a.Comments)
+                  .HasForeignKey(c => c.AnswerId)
+                  .OnDelete(DeleteBehavior.NoAction);
+  
             });
         }
 

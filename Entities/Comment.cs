@@ -1,8 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace StackUnderdose.Entities
+﻿namespace StackUnderdose.Entities
 {
-    public class Answer
+    public class Comment
     {
         public int Id { get; set; }
         public string Content { get; set; }
@@ -10,7 +8,8 @@ namespace StackUnderdose.Entities
         public Guid AuthorId { get; set; }
         public Question Question { get; set; }
         public int QuestionId { get; set; }
-        public List<Comment> Comments { get; set; } = new List<Comment>();
-        public int Score { get; set; } 
+        public Answer Answer { get; set; }
+        public int AnswerId { get; set; }
+        public int Score { get; set; }
     }
 }

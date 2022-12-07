@@ -10,5 +10,6 @@
         public string Email { get; set; }
         public List<Answer> Answers { get; set; } = new List<Answer>();
         public List<Question> Questions { get; set; } = new List<Question>();
+        public List<Comment> Comments { get; set; } = new List<Comment>();
     }
 }

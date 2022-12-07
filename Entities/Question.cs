@@ -10,6 +10,7 @@
         public int Score { get; set; }
         public string State { get; set; }
         public List<Answer> Answers { get; set; } = new List<Answer>();
+        public List<Comment> Comments { get; set; } = new List<Comment>();
         public List<Tag> Tags { get; set; } = new List<Tag>();
     }
 }
