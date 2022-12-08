@@ -9,26 +9,40 @@ namespace StackUnderdose.Seeders
             var questions = dbContext.Questions.ToList();
             var users = dbContext.Users.ToList();
             var answers = dbContext.Answers.ToList();
+            var comments = dbContext.Comments.ToList();
 
             var random = Seeder.rnd;
 
-            if (!answers.Any())
+            if (!comments.Any())
             {
-                var genericAnswers = new List<Answer>();
+                var genericComments = new List<Comment>();
                 for (int i = 0; i < 100; i++)
                 {
-                    var genericAnswer = new Answer
+                    var genericComment = new Comment
                     {
-                        Content = $"Generic content {i}",
+                        Content = $"Generic question comment {i}",
                         Author = users[random.Next(users.Count)],
                         Question = questions[random.Next(questions.Count)],
-                        Score = random.Next(-250, 250)
+                        Score = random.Next(-25, 25)
                     };
 
-                    genericAnswers.Add(genericAnswer);
+                    genericComments.Add(genericComment);
                 }
+                
+                for (int i = 0; i < 300; i++)
+                {
+                    var genericComment = new Comment
+                    {
+                        Content = $"Generic answer comment {i}",
+                        Author = users[random.Next(users.Count)],
+                        Answer = answers[random.Next(answers.Count)],
+                        Score = random.Next(-25, 25)
+                    };
 
-                dbContext.Answers.AddRange(genericAnswers);
+                    genericComments.Add(genericComment);
+                }
+                
+                dbContext.Comments.AddRange(genericComments);
 
                 dbContext.SaveChanges();
             }

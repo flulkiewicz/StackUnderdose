@@ -91,7 +91,6 @@ namespace StackUnderdose.Entities
                   .WithMany(a => a.Comments)
                   .HasForeignKey(c => c.AnswerId)
                   .OnDelete(DeleteBehavior.NoAction);
-  
             });
         }
 

@@ -11,6 +11,7 @@ namespace StackUnderdose.Seeders
             SeedUsers.Seed(dbContext);
             SeedQuestions.Seed(dbContext);
             SeedAnswers.Seed(dbContext);
+            SeedComments.Seed(dbContext);
         }
     }
 }
