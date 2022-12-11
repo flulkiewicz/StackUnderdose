@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using StackUnderdose.Entities;
 
@@ -11,9 +12,11 @@ using StackUnderdose.Entities;
 namespace StackUnderdose.Migrations
 {
     [DbContext(typeof(StackUnderdoseContext))]
-    partial class StackUnderdoseContextModelSnapshot : ModelSnapshot
+    [Migration("20221208164044_Dates")]
+    partial class Dates
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -103,9 +106,6 @@ namespace StackUnderdose.Migrations
                         .ValueGeneratedOnUpdate()
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("ParentCommentId")
-                        .HasColumnType("int");
-
                     b.Property<int?>("QuestionId")
                         .HasColumnType("int");
 
@@ -117,8 +117,6 @@ namespace StackUnderdose.Migrations
                     b.HasIndex("AnswerId");
 
                     b.HasIndex("AuthorId");
-
-                    b.HasIndex("ParentCommentId");
 
                     b.HasIndex("QuestionId");
 
@@ -260,10 +258,6 @@ namespace StackUnderdose.Migrations
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.HasOne("StackUnderdose.Entities.Comment", "ParentComment")
-                        .WithMany()
-                        .HasForeignKey("ParentCommentId");
-
                     b.HasOne("StackUnderdose.Entities.Question", "Question")
                         .WithMany("Comments")
                         .HasForeignKey("QuestionId")
@@ -272,8 +266,6 @@ namespace StackUnderdose.Migrations
                     b.Navigation("Answer");
 
                     b.Navigation("Author");
-
-                    b.Navigation("ParentComment");
 
                     b.Navigation("Question");
                 });

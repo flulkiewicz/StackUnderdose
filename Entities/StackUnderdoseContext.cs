@@ -22,6 +22,12 @@ namespace StackUnderdose.Entities
                 eb.Property(x => x.Score)
                   .HasDefaultValue(0);
 
+                eb.Property(x => x.CreatedDate)
+                  .HasDefaultValueSql("getutcdate()");
+
+                eb.Property(x => x.LastUpdatedDate)
+                  .ValueGeneratedOnUpdate();
+
                 eb.HasOne(a => a.Author)
                   .WithMany(u => u.Answers)
                   .HasForeignKey(a => a.AuthorId)
@@ -30,6 +36,7 @@ namespace StackUnderdose.Entities
                 eb.HasOne(a => a.Question)
                   .WithMany(q => q.Answers)
                   .HasForeignKey(a => a.QuestionId);
+
             });
 
             modelBuilder.Entity<Question>(eb => 
@@ -45,6 +52,12 @@ namespace StackUnderdose.Entities
 
                 eb.Property(x => x.State)
                   .HasDefaultValue("Unanswered");
+
+                eb.Property(x => x.CreatedDate)
+                  .HasDefaultValueSql("getutcdate()");
+
+                eb.Property(x => x.LastUpdatedDate)
+                  .ValueGeneratedOnUpdate();
 
                 eb.HasOne(q => q.Author)
                   .WithMany(u => u.Questions)
@@ -77,6 +90,12 @@ namespace StackUnderdose.Entities
 
             modelBuilder.Entity<Comment>(eb =>
             {
+                eb.Property(x => x.CreatedDate)
+                  .HasDefaultValueSql("getutcdate()");
+
+                eb.Property(x => x.LastUpdatedDate)
+                  .ValueGeneratedOnUpdate();
+
                 eb.HasOne(c => c.Author)
                   .WithMany(a => a.Comments)
                   .HasForeignKey(c => c.AuthorId)
@@ -91,6 +110,10 @@ namespace StackUnderdose.Entities
                   .WithMany(a => a.Comments)
                   .HasForeignKey(c => c.AnswerId)
                   .OnDelete(DeleteBehavior.NoAction);
+
+                eb.HasOne(c => c.ParentComment)
+                  .WithMany()
+                  .HasForeignKey(c => c.ParentCommentId);
             });
         }
 

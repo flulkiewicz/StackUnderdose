@@ -12,5 +12,7 @@
         public List<Answer> Answers { get; set; } = new List<Answer>();
         public List<Comment> Comments { get; set; } = new List<Comment>();
         public List<Tag> Tags { get; set; } = new List<Tag>();
+        public DateTime CreatedDate { get; set; }
+        public DateTime LastUpdatedDate { get; set; }
     }
 }

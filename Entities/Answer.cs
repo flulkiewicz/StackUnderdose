@@ -11,6 +11,8 @@ namespace StackUnderdose.Entities
         public Question Question { get; set; }
         public int QuestionId { get; set; }
         public List<Comment> Comments { get; set; } = new List<Comment>();
-        public int Score { get; set; } 
+        public int Score { get; set; }
+        public DateTime CreatedDate { get; set; }
+        public DateTime LastUpdatedDate { get; set; }
     }
 }
