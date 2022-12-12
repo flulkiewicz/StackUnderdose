@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Http.Json;
+using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.EntityFrameworkCore;
 using StackUnderdose.Entities;
 using StackUnderdose.Seeders;
@@ -74,15 +75,17 @@ app.MapPost("addAnswer", async (StackUnderdoseContext db) =>
         QuestionId= questionId,
     };
 
+    db.Answers.Add(newAnswer);
+    await db.SaveChangesAsync();
 });
 
 app.MapPost("rateUserPost", async (StackUnderdoseContext db) =>
 {
-    var id = 4;
+    var id = 6;
     var isThisAnswer = false;
-    var isThisComment = true;
-    var isThisQuestion = false;
-    bool addScore = false;
+    var isThisComment = false;
+    var isThisQuestion = true;
+    bool addScore = true;
 
     if (isThisAnswer)
     {
@@ -111,10 +114,75 @@ app.MapPost("rateUserPost", async (StackUnderdoseContext db) =>
 
 app.MapPost("addComment", async (StackUnderdoseContext db) =>
 {
+    var itemToCommentId = 200;
+    var userId = "B3C5717C-E363-4C14-CBBF-08DAD7D14528";
+    var userInput = "No i cant?";
+    var isThisAnswer = false;
+    var isThisComment = true;
+    var isThisQuestion = false;
 
+    var newComment = new Comment
+    {
+        AuthorId = Guid.Parse(userId),
+        Content= userInput,
+    };
 
+    if (isThisQuestion) newComment.QuestionId = itemToCommentId;
+    else if (isThisAnswer) newComment.AnswerId = itemToCommentId;
+    else if (isThisComment) newComment.ParentCommentId = itemToCommentId;
+
+    db.Comments.Add(newComment);
+    await db.SaveChangesAsync();
 });
 
+app.MapGet("topScore", async (StackUnderdoseContext db) =>
+{
+    var users = await db.Users
+        .Include(x => x.Questions)
+        .Include(x => x.Answers)
+        .Include(x => x.Comments)
+        
+        .ToListAsync();
+
+    int topScore = -999999999;
+    Guid topUserId = new Guid();
+     
+
+    foreach(var user in users)
+    {
+        int scoreCount = 0;
+
+        foreach (var question in user.Questions) scoreCount += question.Score;
+        
+        foreach (var answer in user.Answers) scoreCount += answer.Score;
+        
+        foreach (var comment in user.Comments) scoreCount += comment.Score;
+        
+
+        if (scoreCount > topScore)
+        {
+            topScore = scoreCount;
+            topUserId = user.Id;
+        }
+    }
+
+    var topUser = await db.Users.FirstAsync(x => x.Id == topUserId);
+
+    var topUserDetails = new { Name = topUser.DisplayName, Score = topScore };
+
+
+    return topUserDetails;
+});
+
+app.MapGet("mostAnswers", async (StackUnderdoseContext db) =>
+{
+    var answers = await db.Answers
+    .GroupBy(x => x.QuestionId)
+    .ToListAsync();
+
+    return answers;
+
+});
 
 
 app.Run();
