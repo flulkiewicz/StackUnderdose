@@ -34,7 +34,7 @@ namespace StackUnderdose.Migrations
 
                     b.HasIndex("TagsId");
 
-                    b.ToTable("QuestionTag");
+                    b.ToTable("QuestionTag", (string)null);
                 });
 
             modelBuilder.Entity("StackUnderdose.Entities.Answer", b =>
@@ -74,7 +74,7 @@ namespace StackUnderdose.Migrations
 
                     b.HasIndex("QuestionId");
 
-                    b.ToTable("Answers");
+                    b.ToTable("Answers", (string)null);
                 });
 
             modelBuilder.Entity("StackUnderdose.Entities.Comment", b =>
@@ -122,7 +122,7 @@ namespace StackUnderdose.Migrations
 
                     b.HasIndex("QuestionId");
 
-                    b.ToTable("Comments");
+                    b.ToTable("Comments", (string)null);
                 });
 
             modelBuilder.Entity("StackUnderdose.Entities.Question", b =>
@@ -167,7 +167,7 @@ namespace StackUnderdose.Migrations
 
                     b.HasIndex("AuthorId");
 
-                    b.ToTable("Questions");
+                    b.ToTable("Questions", (string)null);
                 });
 
             modelBuilder.Entity("StackUnderdose.Entities.Tag", b =>
@@ -184,7 +184,7 @@ namespace StackUnderdose.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Tags");
+                    b.ToTable("Tags", (string)null);
                 });
 
             modelBuilder.Entity("StackUnderdose.Entities.User", b =>
@@ -210,7 +210,7 @@ namespace StackUnderdose.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("QuestionTag", b =>
