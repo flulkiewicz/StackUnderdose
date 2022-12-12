@@ -12,8 +12,8 @@ using StackUnderdose.Entities;
 namespace StackUnderdose.Migrations
 {
     [DbContext(typeof(StackUnderdoseContext))]
-    [Migration("20221208001442_CommentEntityFix")]
-    partial class CommentEntityFix
+    [Migration("20221212160723_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -54,6 +54,15 @@ namespace StackUnderdose.Migrations
                     b.Property<string>("Content")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime>("CreatedDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("getutcdate()");
+
+                    b.Property<DateTime>("LastUpdatedDate")
+                        .ValueGeneratedOnUpdate()
+                        .HasColumnType("datetime2");
+
                     b.Property<int>("QuestionId")
                         .HasColumnType("int");
 
@@ -88,6 +97,18 @@ namespace StackUnderdose.Migrations
                     b.Property<string>("Content")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime>("CreatedDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("getutcdate()");
+
+                    b.Property<DateTime>("LastUpdatedDate")
+                        .ValueGeneratedOnUpdate()
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("ParentCommentId")
+                        .HasColumnType("int");
+
                     b.Property<int?>("QuestionId")
                         .HasColumnType("int");
 
@@ -99,6 +120,8 @@ namespace StackUnderdose.Migrations
                     b.HasIndex("AnswerId");
 
                     b.HasIndex("AuthorId");
+
+                    b.HasIndex("ParentCommentId");
 
                     b.HasIndex("QuestionId");
 
@@ -116,9 +139,18 @@ namespace StackUnderdose.Migrations
                     b.Property<Guid>("AuthorId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<DateTime>("CreatedDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("getutcdate()");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("LastUpdatedDate")
+                        .ValueGeneratedOnUpdate()
+                        .HasColumnType("datetime2");
 
                     b.Property<int>("Score")
                         .ValueGeneratedOnAdd()
@@ -231,6 +263,10 @@ namespace StackUnderdose.Migrations
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
+                    b.HasOne("StackUnderdose.Entities.Comment", "ParentComment")
+                        .WithMany()
+                        .HasForeignKey("ParentCommentId");
+
                     b.HasOne("StackUnderdose.Entities.Question", "Question")
                         .WithMany("Comments")
                         .HasForeignKey("QuestionId")
@@ -239,6 +275,8 @@ namespace StackUnderdose.Migrations
                     b.Navigation("Answer");
 
                     b.Navigation("Author");
+
+                    b.Navigation("ParentComment");
 
                     b.Navigation("Question");
                 });
