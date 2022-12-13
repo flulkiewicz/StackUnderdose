@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using StackUnderdose.Entities;
 using StackUnderdose.Seeders;
 using System.Text.Json.Serialization;
+using System.Text.RegularExpressions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,6 +34,43 @@ using var scope = app.Services.CreateScope();
 var dbContext = scope.ServiceProvider.GetService<StackUnderdoseContext>();
 
 Seeder.Seed(dbContext);
+
+app.MapPost("createUser", async (StackUnderdoseContext db) =>
+{
+    var userInput = new
+    {
+        FirstName = "Marek",
+        LastName = "Kowalsky",
+        DisplayName = "SimpleNick",
+        Email = "Kowall@o2.pl"
+    };
+
+    var newUser = new User()
+    {
+        FirstName = userInput.FirstName,
+        LastName = userInput.LastName,
+        DisplayName = userInput.DisplayName,
+        Email = userInput.Email,
+        Questions = new List<Question>
+        {
+            new Question
+            {
+                Title = "Just testing",
+                Description = "Wolololo",
+
+            },
+            new Question
+            {
+                Title = "Am i red or blue?",
+                Description = "Blue Always Win"
+            }
+        }
+    };
+
+    db.Users.Add(newUser);
+    await db.SaveChangesAsync();
+
+});
 
 app.MapPost("createQuestion", async (StackUnderdoseContext db) => 
 {
@@ -135,6 +173,15 @@ app.MapPost("addComment", async (StackUnderdoseContext db) =>
     await db.SaveChangesAsync();
 });
 
+app.MapPut("updateKowalskyMailAddHimFirst", async (StackUnderdoseContext db) =>
+{
+    var userKowalsky = await db.Users.FirstAsync(x => x.DisplayName == "SimpleNick");
+
+    userKowalsky.Email = "Kowalewsky@gpmail.com";
+
+    await db.SaveChangesAsync();
+});
+
 app.MapGet("topScore", async (StackUnderdoseContext db) =>
 {
     var users = await db.Users
@@ -176,12 +223,41 @@ app.MapGet("topScore", async (StackUnderdoseContext db) =>
 
 app.MapGet("mostAnswers", async (StackUnderdoseContext db) =>
 {
-    var answers = await db.Answers
-    .GroupBy(x => x.QuestionId)
-    .ToListAsync();
+    var users = await db.Users
+        .Include(x => x.Answers)
+        .ToListAsync();
 
-    return answers;
+    int mostAnswers = 0;
+    var mostAnswersUserId = new Guid();
 
+    foreach(var user in users)
+    {
+        var answerCount = user.Answers.Count();
+
+        if (answerCount > mostAnswers)
+        {
+            mostAnswers = answerCount;
+            mostAnswersUserId = user.Id;
+        }
+    }
+
+    var userWithMostAnswers = users.First(x => x.Id == mostAnswersUserId);
+
+    return new { userWithMostAnswers.DisplayName, mostAnswers };
+});
+
+app.MapDelete("deleteKowalsky", async (StackUnderdoseContext db) =>
+{
+    var userKowalsky = await db.Users
+        .Include(x => x.Questions)
+        .FirstAsync(x => x.DisplayName == "SimpleNick");
+    var kowalskyQuestions = userKowalsky.Questions;
+
+    db.RemoveRange(kowalskyQuestions);
+    await db.SaveChangesAsync();
+
+    db.Remove(userKowalsky);
+    await db.SaveChangesAsync();
 });
 
 
